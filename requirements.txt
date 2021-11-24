@@ -1,0 +1,4 @@
+hikari==2.0.0.dev104
+hikari-tanjun==2.2.0a1
+aiohttp~=3.8
+APScheduler==3.8.1
