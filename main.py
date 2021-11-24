@@ -6,11 +6,13 @@ from pathlib import Path
 import hikari
 from hikari import Intents
 from hikari.snowflakes import Snowflake
+from hikari.interactions.base_interactions import ResponseType
 import tanjun
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 import config
 from jobs import crow, reddit
+from modules.ping import ping_response
 
 if os.name != 'nt':
     import uvloop
@@ -31,9 +33,9 @@ client.load_modules(*Path('modules').glob('*.py'))
 
 @bot.listen()
 async def on_shard_ready(_: hikari.ShardReadyEvent) -> None:
-    # scheduler.add_job(crow.run, 'cron', minute='*/1', args=[bot.rest], id='crow')
-    # scheduler.add_job(reddit.run, 'cron', minute='*/1', args=[bot.rest], id='reddit')
     scheduler.start()
+    scheduler.add_job(crow.run, 'cron', hour='12',  minute='30', args=[bot.rest], id='crow')
+    scheduler.add_job(reddit.run, 'cron', hour='16', minute='0', args=[bot.rest], id='reddit')
 
 
 @bot.listen()
@@ -52,6 +54,14 @@ async def react(event: hikari.GuildMessageCreateEvent) -> None:
 
     if re.search(r'\bb(irth)?day', event.content, re.I | re.M):
         await event.message.add_reaction('🎂')
+
+
+@bot.listen()
+async def ping_event(event: hikari.InteractionCreateEvent) -> None:
+    if event.interaction.type == hikari.InteractionType.MESSAGE_COMPONENT and event.interaction.custom_id == '🏓':
+        msg, row = await ping_response(event.interaction.user.mention, bot.rest)
+        await event.interaction.create_initial_response(ResponseType.MESSAGE_UPDATE, components=[])
+        await event.app.rest.create_message(event.interaction.channel_id, msg, component=row)
 
 
 if __name__ == '__main__':
