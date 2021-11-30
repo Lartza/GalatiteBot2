@@ -25,7 +25,11 @@ async def run(rest: hikari.api.rest.RESTClient) -> None:
                     .set_footer(
                         text="This is today's top post of /r/elderscrollsonline.",
                     )
-                    .set_image(data['url_overridden_by_dest'])
                 )
+
+                try:
+                    embed.set_image(data['url_overridden_by_dest'])
+                except KeyError:
+                    pass
 
                 await rest.create_message(config.REDDIT_CHANNEL, embed)
