@@ -14,22 +14,33 @@ async def run(rest: hikari.api.rest.RESTClient) -> None:
                 json = await response.json()
                 data = json[0]['data']['children'][0]['data']
 
-                embed = (
-                    hikari.Embed(
-                        colour=hikari.Colour(0x0099ff),
-                        title=data['title'],
-                        url='https://www.reddit.com' + data['permalink'],
-                        description=data['selftext'],
+                if data['is_video']:
+                    embed = (
+                        hikari.Embed(
+                            colour=hikari.Colour(0x0099ff),
+                            title=data['title'],
+                            url='https://www.reddit.com' + data['permalink'],
+                            description='Videos not supported :(',
+                        )
                     )
-                    .set_author(name='u/' + data['author'])
-                    .set_footer(
-                        text="This is today's top post of /r/elderscrollsonline.",
+                else:
+                    embed = (
+                        hikari.Embed(
+                            colour=hikari.Colour(0x0099ff),
+                            title=data['title'],
+                            url='https://www.reddit.com' + data['permalink'],
+                            description=data['selftext'],
+                        )
                     )
-                )
 
-                try:
-                    embed.set_image(data['url_overridden_by_dest'])
-                except KeyError:
-                    pass
+                    try:
+                        embed.set_image(data['url_overridden_by_dest'])
+                    except KeyError:
+                        pass
+
+                embed.set_author(name='u/' + data['author'])
+                embed.set_footer(
+                    text="This is today's top post of /r/elderscrollsonline.",
+                )
 
                 await rest.create_message(config.REDDIT_CHANNEL, embed)
