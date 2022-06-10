@@ -8,10 +8,8 @@ from hikari import Intents
 from hikari.snowflakes import Snowflake
 from hikari.interactions.base_interactions import ResponseType
 import tanjun
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 import config
-from jobs import crow, reddit
 from modules.ping import ping_response
 
 if os.name != 'nt':
@@ -19,7 +17,6 @@ if os.name != 'nt':
     uvloop.install()
 
 logger = logging.getLogger('galatitebot')
-scheduler = AsyncIOScheduler()
 
 my_intents = (
     Intents.ALL_UNPRIVILEGED |
@@ -29,18 +26,7 @@ my_intents = (
 bot = hikari.GatewayBot(config.TOKEN, intents=my_intents)
 client = tanjun.Client.from_gateway_bot(bot, declare_global_commands=Snowflake(config.GUILD_ID))
 client.load_modules(*Path('modules').glob('*.py'))
-
-
-@bot.listen()
-async def on_shard_ready(_: hikari.ShardReadyEvent) -> None:
-    scheduler.start()
-    scheduler.add_job(crow.run, 'cron', hour='12',  minute='30', args=[bot.rest], id='crow')
-    scheduler.add_job(reddit.run, 'cron', hour='16', minute='0', args=[bot.rest], id='reddit')
-
-
-@bot.listen()
-async def on_stopping(_: hikari.StoppingEvent) -> None:
-    scheduler.shutdown()
+client.load_modules(*Path('jobs').glob('*.py'))
 
 
 @bot.listen()

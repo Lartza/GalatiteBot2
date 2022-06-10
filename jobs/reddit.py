@@ -1,10 +1,15 @@
 import hikari
+import tanjun
 import aiohttp
 
 import config
 
+component = tanjun.Component()
 
-async def run(rest: hikari.api.rest.RESTClient) -> None:
+
+@component.with_schedule
+@tanjun.as_time_schedule(hours=16, minutes=00)
+async def run(client: tanjun.Client = tanjun.inject(type=tanjun.Client)) -> None:
     async with aiohttp.ClientSession() as session:
         async with session.get('https://www.reddit.com/r/elderscrollsonline/top/.json?t=day') as feed_response:
             feed_json = await feed_response.json()
@@ -43,4 +48,7 @@ async def run(rest: hikari.api.rest.RESTClient) -> None:
                     text="This is today's top post of /r/elderscrollsonline.",
                 )
 
-                await rest.create_message(config.REDDIT_CHANNEL, embed)
+                await client.rest.create_message(config.REDDIT_CHANNEL, embed)
+
+
+loader = component.make_loader()
