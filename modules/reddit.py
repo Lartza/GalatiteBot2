@@ -12,7 +12,7 @@ component = tanjun.Component()
 @tanjun.as_slash_command('reddit', 'Admin only, force top reddit post job')
 async def reddit(ctx: tanjun.abc.SlashContext) -> None:
     await ctx.create_initial_response('Posting!', flags=hikari.MessageFlag.EPHEMERAL)
-    await jobs.reddit.run(ctx.rest)
+    await jobs.reddit.run(ctx.client)
 
 
 loader = component.make_loader()

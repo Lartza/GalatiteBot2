@@ -1,6 +1,7 @@
 import hikari
 import tanjun
 import aiohttp
+import alluka
 
 import config
 
@@ -9,7 +10,7 @@ component = tanjun.Component()
 
 @component.with_schedule
 @tanjun.as_time_schedule(hours=16, minutes=00)
-async def run(client: tanjun.Client = tanjun.inject(type=tanjun.Client)) -> None:
+async def run(client: alluka.Injected[tanjun.Client]) -> None:
     async with aiohttp.ClientSession() as session:
         async with session.get('https://www.reddit.com/r/elderscrollsonline/top/.json?t=day') as feed_response:
             feed_json = await feed_response.json()

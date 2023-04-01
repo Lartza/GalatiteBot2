@@ -8,7 +8,7 @@ component = tanjun.Component()
 
 
 async def ping_response(mention: str, rest: hikari.api.rest.RESTClient) ->\
-        Tuple[str, hikari.api.special_endpoints.ActionRowBuilder]:
+        Tuple[str, hikari.api.special_endpoints.MessageActionRowBuilder]:
     msg = None
     rnd = random.randint(0, 99)
 
@@ -62,7 +62,7 @@ async def ping_response(mention: str, rest: hikari.api.rest.RESTClient) ->\
         else:
             msg = f'-Ohh no... {mention} missed. \n{mention} is out! :thumbsdown:'
 
-    row = rest.build_action_row()
+    row = rest.build_message_action_row()
     row.add_button(hikari.ButtonStyle.PRIMARY, '🏓').set_emoji('🏓').add_to_container()
 
     return msg, row

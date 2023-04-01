@@ -1,6 +1,8 @@
 import hikari
 import tanjun
 import aiohttp
+import alluka
+from datetime import date
 
 import config
 
@@ -9,8 +11,20 @@ component = tanjun.Component()
 
 @component.with_schedule
 @tanjun.as_time_schedule(hours=12, minutes=30)
-async def run(client: tanjun.Client = tanjun.inject(type=tanjun.Client)) -> None:
-    if config.UNSPLASH_ACCESS_KEY and (config.UNSPLASH_ACCESS_KEY is not None):
+async def run(client: alluka.Injected[tanjun.Client]) -> None:
+    today = date.today()
+    if today.day == 1 and today.month == 4:
+        embed = (
+            hikari.Embed(
+                colour=hikari.Colour(0x0099ff),
+                title='BRRRRRR RA-TA-TA-TA-TA-TA',
+                description='[Tahoe Quarterly](https://tahoequarterly.com/features/as-the-old-crow-flies)'
+            )
+            .set_image('https://lartza.ltn.fi/Hero2.jpg')
+            .set_footer(text='-American Crow')
+        )
+        await client.rest.create_message(config.CROW_CHANNEL, embed)
+    elif config.UNSPLASH_ACCESS_KEY and (config.UNSPLASH_ACCESS_KEY is not None):
         async with aiohttp.ClientSession() as session:
             async with session.get('https://api.unsplash.com/photos/random',
                                    headers={'Authorization': f'Client-ID {config.UNSPLASH_ACCESS_KEY}',
