@@ -18,7 +18,7 @@ async def agree(ctx: tanjun.abc.SlashContext) -> None:
     else:
         await ctx.member.add_role(role)
         await ctx.create_initial_response("Thank you for agreeing to our rules.", flags=hikari.MessageFlag.EPHEMERAL)
-        await ctx.rest.create_message(channel, f"Greetings! Welcome to the Galatite Order! {ctx.author.mention},"
+        await ctx.rest.create_message(channel, f"Greetings! Welcome to the Bantam Symposium! {ctx.author.mention},"
                                                " take a look around. There is always someone to help!"
                                                " We hope you'll have a majestic time here.")
 

@@ -1,5 +1,5 @@
 # GalatiteBot2
-Custom Discord bot for the Galatite Order - an Elder Scrolls Online guild.
+Custom Discord bot for the Bantam Symposium (previously known as Galatite Order) - an Elder Scrolls Online guild.
 
 ## Commands
 | Command | Description                        | Arguments                                  |
