@@ -20,7 +20,8 @@ logger = logging.getLogger('galatitebot')
 
 my_intents = (
     Intents.ALL_UNPRIVILEGED |
-    Intents.GUILD_MEMBERS
+    Intents.GUILD_MEMBERS |
+    Intents.MESSAGE_CONTENT
 )
 
 bot = hikari.GatewayBot(config.TOKEN, intents=my_intents)
