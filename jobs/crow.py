@@ -1,8 +1,8 @@
+from datetime import date
 import hikari
 import tanjun
 import aiohttp
 import alluka
-from datetime import date
 
 import config
 

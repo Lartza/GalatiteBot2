@@ -63,8 +63,7 @@ async def ping_response(mention: str, rest: hikari.api.rest.RESTClient) ->\
             msg = f'-Ohh no... {mention} missed. \n{mention} is out! :thumbsdown:'
 
     row = rest.build_message_action_row()
-    row.add_button(hikari.ButtonStyle.PRIMARY, '🏓').set_emoji('🏓').add_to_container()
-
+    row.add_interactive_button(hikari.ButtonStyle.PRIMARY, '🏓', emoji='🏓')
     return msg, row
 
 
