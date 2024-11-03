@@ -6,12 +6,6 @@ ignore-paths:
   - venv
   - __pycache__
 
-bandit:
-  run: true
-
-dodgy:
-  run: false
-
 pylint:
   enable:
     - useless-suppression
